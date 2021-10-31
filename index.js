@@ -3,6 +3,8 @@ const express = require("express");
 
 const app = express();
 
+app.get("/", (req, res) => res.sendFile(`${__dirname}/app/index.html`));
+
 app.get("/song/:id", async (req, res) => {
     try {
         for await (const chunk of streamify(`http://youtube.com/watch?v=${req.params.id}`)) {
@@ -17,4 +19,4 @@ app.get("/song/:id", async (req, res) => {
     }
 });
 
-app.listen(6969, () => console.log("Listening on 6969"));
+app.listen(6969, () => console.log("Listening on port 6969"));

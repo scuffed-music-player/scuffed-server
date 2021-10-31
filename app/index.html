@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>:0</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="controls">
+            <button @click="play">Play</button>
+            <button @click="pause">Pause</button>
+            <span>Now Playing: <b>SONG NAME</b></span>
+        </div>
+
+        <div>
+            Play a Song:
+            <input type="text" v-model="songToPlay" />
+            <button @click="startPlaying">Go</button>
+        </div>
+
+        <h2>Playlists:</h2>
+
+        <details v-for="(playlist, name, i) of playlists" :key="playlist.staticIndex"></details>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <script>
+        let audio = new Audio();
+
+        const app = Vue.createApp({
+            data() {
+                return {
+                    songToPlay: null
+                }
+            },
+            methods: {
+                async startPlaying() {
+                    audio = new Audio(`/song/${this.songToPlay}`);
+                    audio.play();
+                },
+                play() {
+                    audio.play();
+                },
+                pause() {
+                    audio.pause();
+                }
+            }
+        }).mount("#app");
+    </script>
+
+    <style>
+        :root {
+            font-size: 20px;
+        }
+
+        * {
+            font-size: 1rem;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        .controls {
+            background: black;
+        }
+
+        .controls > * {
+            margin-right: 10px;
+        }
+
+        .controls :not(button) {
+            color: white;
+        }
+
+        #app > div {
+            padding: 10px;
+        }
+
+        button, input {
+            padding: 5px 7.5px;
+        }
+    </style>
+</body>
+
+</html>
