@@ -6,23 +6,25 @@ import keys from "./keys.json";
 
 const app = express();
 
-const authenticated: Handler = (req, res, next) => {
-    const [u, p] = req.params.auth?.split("-") || ([] as undefined[]);
+const api = express.Router();
+
+const authorized: Handler = (req, res, next) => {
+    // console.log(req.params);
+    const [u, p] = req.params.auth?.split("$") || ([] as undefined[]);
 
     if (u && p && keys.users[u as keyof typeof keys.users] == p) {
         next();
     } else {
         res.status(401).json({
             success: false,
-            message: "Unauthorized"
+            message: "Unauthorized",
+            u, p
         });
     }
-}
+};
 
-const api = express.Router();
-api.use(authenticated);
-
-app.get("/song/:id", async (req, res) => {
+api.get("/stream/:id", async (req, res) => {
+    console.log(req.params);
     try {
         for await (const chunk of streamify(`http://youtube.com/watch?v=${req.params.id}`) as WriteStream) {
             res.write(chunk);
@@ -41,5 +43,5 @@ app.get("/song/:id", async (req, res) => {
     }
 });
 
-app.use("/api/:auth", api);
+app.use("/api", api);
 app.listen(6969, () => console.log("Listening on port 6969"));
