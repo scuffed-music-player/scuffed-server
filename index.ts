@@ -1,10 +1,11 @@
 import express, { Handler } from "express";
-import streamify from "youtube-audio-stream";
-
-import { WriteStream } from "./types";
+import cors from "cors";
 import keys from "./keys.json";
+import ytdl from "ytdl-core";
 
 const app = express();
+
+app.use(cors());
 
 const api = express.Router();
 
@@ -24,23 +25,12 @@ const authorized: Handler = (req, res, next) => {
 };
 
 api.get("/stream/:id", async (req, res) => {
-    console.log(req.params);
-    try {
-        for await (const chunk of streamify(`http://youtube.com/watch?v=${req.params.id}`) as WriteStream) {
-            res.write(chunk);
-        }
-        res.status(200).json({
-            success: true,
-            message: "Song finished!"
-        }).end();
-    } catch (err) {
-        if (!res.headersSent) {
-            res.status(500).json({
-                success: false,
-                message: "Something goofed! Maybe that song doesn't exist?"
-            }).end();
-        }
-    }
+    const path = `${__dirname}/static/${req.params.id}.mp3`;
+    console.log(path);
+
+    ytdl(req.params.id, {
+        quality: "highestaudio",
+    }).pipe(res);
 });
 
 app.use("/api", api);
