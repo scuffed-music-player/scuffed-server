@@ -31,9 +31,6 @@ const authorized: Handler = (req, res, next) => {
 };
 
 api.get("/stream/:id", async (req, res) => {
-    const path = `${__dirname}/static/${req.params.id}.mp3`;
-    console.log(path);
-
     ytdl(req.params.id, {
         quality: "highestaudio",
     }).pipe(res).on("error", console.log);
@@ -43,7 +40,8 @@ api.get("/data/:query", async (req, res) => {
     //@ts-ignore
     const searchResponse = await youtube.search.list({
         q: req.params.query,
-        part: "id,snippet"
+        part: "id,snippet",
+        maxResults: 1
     });
 
     res.status(200).json(searchResponse.data.items?.[0]);
