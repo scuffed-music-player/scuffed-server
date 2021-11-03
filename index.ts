@@ -1,51 +1,35 @@
-import express, { Handler } from "express";
+import express from "express";
 import cors from "cors";
-import keys from "./keys.json";
-import ytdl from "ytdl-core";
-import { google } from "googleapis";
+
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
-
 app.use(cors());
 
-const api = express.Router();
+import { google } from "googleapis";
 
 const youtube = google.youtube({
     version: "v3",
-    auth: keys.YOUTUBE_KEY
+    auth: process.env.YOUTUBE_API_KEY
 });
 
-const authorized: Handler = (req, res, next) => {
-    // console.log(req.params);
-    const [u, p] = req.params.auth?.split("$") || ([] as undefined[]);
+import { useStreamRoute } from "./api/stream";
+import { useDataRoute } from "./api/data";
 
-    if (u && p && keys.users[u as keyof typeof keys.users] == p) {
-        next();
-    } else {
-        res.status(401).json({
-            success: false,
-            message: "Unauthorized",
-            u, p
-        });
-    }
-};
+import { MongoClient } from "mongodb";
+const dbConnectionString = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.uulfu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
-api.get("/stream/:id", async (req, res) => {
-    ytdl(req.params.id, {
-        quality: "highestaudio",
-    }).pipe(res).on("error", console.log);
-});
+(async () => {
+    const client = await MongoClient.connect(dbConnectionString);
+    const db = client.db("db");
 
-api.get("/data/:query", async (req, res) => {
-    //@ts-ignore
-    const searchResponse = await youtube.search.list({
-        q: req.params.query,
-        part: "id,snippet",
-        maxResults: 1
-    });
+    const api = express.Router();
 
-    res.status(200).json(searchResponse.data.items?.[0]);
-});
+    api.get("/data/:query", useDataRoute(db, youtube));
+    api.get("/stream/:id", useStreamRoute());
 
-app.use("/api", api);
-app.listen(6969, () => console.log("Listening on port 6969"));
+    app.use("/api", api);
+
+    app.listen(6969, () => console.log("Listening on port 6969"));
+})();
