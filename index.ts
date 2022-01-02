@@ -20,7 +20,7 @@ import { useDataRoute } from "./api/data";
 import { MongoClient } from "mongodb";
 const dbConnectionString = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.uulfu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
-(async () => {
+export default async () => new Promise<void>(async (resolve) => {
     const client = await MongoClient.connect(dbConnectionString);
     const db = client.db("db");
 
@@ -31,5 +31,5 @@ const dbConnectionString = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@
 
     app.use("/api", api);
 
-    app.listen(6969, () => console.log("Listening on port 6969"));
-})();
+    app.listen(6969, () => resolve());
+});
