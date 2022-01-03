@@ -9,8 +9,6 @@ export const useDataRoute: ReturnType = (db: Db, youtube: youtube_v3.Youtube) =>
     const searches = db.collection<ISongData & { query: string, fromDb: true }>("searches");
 
     return async (req, res) => {
-        console.log(req.params.query)
-
         const query = req.params.query.toLowerCase().trim();
 
         // First search database if it's saved:
