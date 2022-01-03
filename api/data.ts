@@ -33,6 +33,7 @@ export const useDataRoute: ReturnType = (db: Db, youtube: youtube_v3.Youtube) =>
         });
     
         // Use API call and save it to DB for later:
+        //@ts-ignore
         const target = searchResponse.data.items?.[0];
         
         if (target && target.id?.videoId && target.snippet) {
