@@ -1,6 +1,6 @@
 import server from "./";
-const port = process.env.PORT || 6969;
+const port = process.env.PORT || 8080;
 
 server().then((app) => {
-    app.listen(6969, () => console.log("Started dev server at port " + port));
+    app.listen(port, () => console.log("Started dev server at port " + port));
 });
