@@ -1,2 +1,6 @@
 import server from "./";
-server().then(() => console.log("Listening on port 6969"));
+const port = process.env.PORT || 6969;
+
+server().then((app) => {
+    app.listen(6969, () => console.log("Started dev server at port " + port));
+});

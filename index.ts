@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Express } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { google } from "googleapis";
@@ -23,7 +23,7 @@ const youtube = google.youtube({
 
 const dbConnectionString = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.uulfu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
-export default async () => new Promise<void>(async (resolve) => {
+export default async () => new Promise<Express>(async (resolve) => {
     const client = await MongoClient.connect(dbConnectionString);
     const db = client.db("db");
 
@@ -37,5 +37,5 @@ export default async () => new Promise<void>(async (resolve) => {
 
     app.use("/api", api);
 
-    app.listen(6969, () => resolve());
+    resolve(app);
 });
