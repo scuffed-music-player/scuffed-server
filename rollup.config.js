@@ -9,7 +9,10 @@ export default {
         commonjs(),
         json(),
         nodeResolve(), 
-        typescript()
+        typescript({
+            module: "esnext",
+            include: '**/*.{ts,js}'
+        })
     ],
     output: {
         dir: "dist",
