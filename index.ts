@@ -1,7 +1,6 @@
 import express, { Express } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { google } from "googleapis";
 import { MongoClient } from "mongodb";
 
 import { useStreamRoute } from "./api/stream";
@@ -16,11 +15,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const youtube = google.youtube({
-    version: "v3",
-    auth: process.env.YOUTUBE_API_KEY
-});
-
 const dbConnectionString = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.uulfu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 export default async () => new Promise<Express>(async (resolve) => {
@@ -29,7 +23,7 @@ export default async () => new Promise<Express>(async (resolve) => {
 
     const api = express.Router();
 
-    api.get("/data/:query", useDataRoute(db, youtube));
+    api.get("/data/:query", useDataRoute(db));
     api.get("/stream/:id", useStreamRoute());
     api.post("/upload", useUploadRoute(db));
     api.get("/albums", useAlbumsRoute(db));
