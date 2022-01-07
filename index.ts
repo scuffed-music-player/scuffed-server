@@ -15,11 +15,15 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const dbConnectionString = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.uulfu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const dbConnectionString = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.uulfu.mongodb.net/db?retryWrites=true&w=majority`;
 
-export default async () => new Promise<Express>(async (resolve) => {
+export default async () => {
     const client = await MongoClient.connect(dbConnectionString);
     const db = client.db("db");
+
+    app.get("/", (req, res) => res.status(200).json({
+        success: true,
+    }));
 
     const api = express.Router();
 
@@ -31,5 +35,5 @@ export default async () => new Promise<Express>(async (resolve) => {
 
     app.use("/api", api);
 
-    resolve(app);
-});
+    app.listen(process.env.PORT || 8080, () => console.log(`Started streaming server on port ${process.env.PORT || 8080}`));
+};
