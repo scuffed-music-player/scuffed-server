@@ -4,9 +4,9 @@
   "description": "Server for the streaming app",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node run.ts",
-    "dev": "ts-node-dev run.ts --respawn",
-    "build": "rollup -c"
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "ts-node-dev index.ts --respawn"
   },
   "author": "raghav-misra",
   "dependencies": {

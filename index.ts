@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { MongoClient } from "mongodb";
@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const dbConnectionString = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.uulfu.mongodb.net/db?retryWrites=true&w=majority`;
+const dbConnectionString = `mongodb+srv://admin:${process.env.MONGO_SECRET}@cluster0.uulfu.mongodb.net/db?retryWrites=true&w=majority`;
 
 export default async () => {
     const client = await MongoClient.connect(dbConnectionString);
