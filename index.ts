@@ -17,12 +17,13 @@ app.use(cors());
 
 const dbConnectionString = `mongodb+srv://admin:${process.env.MONGO_SECRET}@cluster0.uulfu.mongodb.net/db?retryWrites=true&w=majority`;
 
-export default async () => {
+const init = async () => {
     const client = await MongoClient.connect(dbConnectionString);
     const db = client.db("db");
 
     app.get("/", (req, res) => res.status(200).json({
         success: true,
+        message: "Root of the streaming server! Useful endpoints are at /api <3"
     }));
 
     const api = express.Router();
@@ -37,3 +38,5 @@ export default async () => {
 
     app.listen(process.env.PORT || 8080, () => console.log(`Started streaming server on port ${process.env.PORT || 8080}`));
 };
+
+init();
