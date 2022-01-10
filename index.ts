@@ -7,7 +7,9 @@ import { useStreamRoute } from "./api/stream";
 import { useDataRoute } from "./api/data";
 import { useUploadRoute } from "./api/upload";
 import { useAlbumsRoute } from "./api/albums";
-import { useAlbumByIdRoute } from "./api/albums/_id";
+import { useAlbumByIdRoute } from "./api/album";
+
+import { authMiddleware } from "./auth";
 
 dotenv.config();
 
@@ -28,11 +30,11 @@ const init = async () => {
 
     const api = express.Router();
 
-    api.get("/data/:query", useDataRoute(db));
     api.get("/stream/:id", useStreamRoute());
-    api.post("/upload", useUploadRoute(db));
-    api.get("/albums", useAlbumsRoute(db));
-    api.get("/albums/:id", useAlbumByIdRoute(db))
+    api.get("/data/:query", authMiddleware, useDataRoute());
+    api.post("/upload", authMiddleware, useUploadRoute(db));
+    api.get("/albums", authMiddleware, useAlbumsRoute(db));
+    api.get("/album", authMiddleware, useAlbumByIdRoute(db))
 
     app.use("/api", api);
 

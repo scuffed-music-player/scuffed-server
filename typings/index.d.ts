@@ -9,3 +9,8 @@ export interface IAlbum {
     artist: string;
     songs: ISongData[];
 }
+
+export interface IUser {
+    username: string;
+    passwordHash: string;
+}

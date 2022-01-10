@@ -1,6 +1,6 @@
 import { Handler } from "express";
 import { Db, ObjectId } from "mongodb";
-import { IAlbum } from "../../typings";
+import { IAlbum } from "../typings";
 
 export const useAlbumByIdRoute: (db: Db) => Handler = (db) => {
     const albums = db.collection<IAlbum>("albums");
