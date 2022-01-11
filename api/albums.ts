@@ -7,12 +7,12 @@ export const useAlbumsRoute: (db: Db) => Handler = (db) => {
 
     return async (req, res) => {
         try {
-            res.status(201).json({
+            return res.status(201).json({
                 success: true,
                 albums: await albums.find({}).project<IAlbum>({ name: true, artist: true}).toArray()
             });
         } catch (error) {
-            res.status(500).json({
+            return res.status(500).json({
                 success: false,
                 error,
             })

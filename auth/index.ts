@@ -27,7 +27,7 @@ export const authMiddleware: Handler = async (req, res, next) => {
         req.user = await authenticateToken(token);
         next();
     } catch (error) {
-        res.status(403).json({
+        return res.status(403).json({
             success: false,
             error,
         });

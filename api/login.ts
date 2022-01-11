@@ -4,7 +4,7 @@ import { IUser } from "../typings";
 import bcrypt from "bcrypt";
 import { generateToken } from "../auth";
 
-export const useAlbumsRoute: (db: Db) => Handler = (db) => {
+export const useLoginRoute: (db: Db) => Handler = (db) => {
     const users = db.collection<IUser>("users");
 
     return async (req, res) => {

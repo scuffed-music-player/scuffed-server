@@ -7,8 +7,9 @@ import { useStreamRoute } from "./api/stream";
 import { useDataRoute } from "./api/data";
 import { useUploadRoute } from "./api/upload";
 import { useAlbumsRoute } from "./api/albums";
-import { useAlbumByIdRoute } from "./api/album";
-
+import { useAlbumRoute } from "./api/album";
+import { useLoginRoute } from "./api/login";
+import { useSignupRoute } from "./api/signup";
 import { authMiddleware } from "./auth";
 
 dotenv.config();
@@ -34,7 +35,9 @@ const init = async () => {
     api.get("/data/:query", authMiddleware, useDataRoute());
     api.post("/upload", authMiddleware, useUploadRoute(db));
     api.get("/albums", authMiddleware, useAlbumsRoute(db));
-    api.get("/album", authMiddleware, useAlbumByIdRoute(db))
+    api.get("/album", authMiddleware, useAlbumRoute(db));
+    api.get("/login", useLoginRoute(db));
+    api.get("/signup", useSignupRoute(db), useLoginRoute(db));
 
     app.use("/api", api);
 
