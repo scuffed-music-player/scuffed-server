@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { MongoClient } from "mongodb";
 
 import { useStreamRoute } from "./api/stream";
-import { useDataRoute } from "./api/data";
+import { useSearchRoute } from "./api/search";
 import { useUploadRoute } from "./api/upload";
 import { useAlbumsRoute } from "./api/albums";
 import { useAlbumRoute } from "./api/album";
@@ -32,7 +32,7 @@ const init = async () => {
     const api = express.Router();
 
     api.get("/stream/:id", useStreamRoute());
-    api.get("/data/:query", authMiddleware, useDataRoute());
+    api.get("/search/:query", authMiddleware, useSearchRoute());
     api.post("/upload", authMiddleware, useUploadRoute(db));
     api.get("/albums", authMiddleware, useAlbumsRoute(db));
     api.get("/album/:id", authMiddleware, useAlbumRoute(db));

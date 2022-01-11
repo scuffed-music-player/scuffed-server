@@ -2,7 +2,7 @@ import { Handler } from "express";
 import { youtube } from "scrape-youtube";
 import { ISongData } from "../typings";
 
-export const useDataRoute: () => Handler = () => async (req, res) => {
+export const useSearchRoute: () => Handler = () => async (req, res) => {
     try {
         const query = req.params.query.toLowerCase().trim();
 
