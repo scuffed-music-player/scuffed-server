@@ -35,7 +35,7 @@ const init = async () => {
     api.get("/data/:query", authMiddleware, useDataRoute());
     api.post("/upload", authMiddleware, useUploadRoute(db));
     api.get("/albums", authMiddleware, useAlbumsRoute(db));
-    api.get("/album", authMiddleware, useAlbumRoute(db));
+    api.get("/album/:id", authMiddleware, useAlbumRoute(db));
     api.post("/login", useLoginRoute(db));
     api.post("/signup", useSignupRoute(db), useLoginRoute(db));
 
