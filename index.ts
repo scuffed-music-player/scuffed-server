@@ -10,7 +10,7 @@ import { useAlbumsRoute } from "./api/albums";
 import { useAlbumRoute } from "./api/album";
 import { useLoginRoute } from "./api/login";
 import { useSignupRoute } from "./api/signup";
-import { authMiddleware } from "./auth";
+import { authMiddleware } from "./services/auth";
 
 dotenv.config();
 
@@ -31,7 +31,7 @@ const init = async () => {
 
     const api = express.Router();
 
-    api.get("/stream/:id", useStreamRoute());
+    api.get("/stream/:payload", useStreamRoute());
     api.get("/search/:query", authMiddleware, useSearchRoute());
     api.post("/upload", authMiddleware, useUploadRoute(db));
     api.get("/albums", authMiddleware, useAlbumsRoute(db));

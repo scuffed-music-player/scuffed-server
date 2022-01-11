@@ -2,7 +2,7 @@ import { Handler } from "express";
 import { Db } from "mongodb";
 import { IUser } from "../typings";
 import bcrypt from "bcrypt";
-import { generateToken } from "../auth";
+import { generateToken } from "../services/auth";
 
 export const useLoginRoute: (db: Db) => Handler = (db) => {
     const users = db.collection<IUser>("users");
