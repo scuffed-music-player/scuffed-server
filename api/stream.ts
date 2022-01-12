@@ -4,7 +4,7 @@ import { authenticateToken } from "../services/auth";
 
 export const useStreamRoute: () => Handler = () => (req, res) => {
     let id: string | undefined;
-    let token: string | undefined
+    let token: string | undefined;
 
     try {
         const payload = JSON.parse(Buffer.from(req.params.payload, "base64").toString("utf-8"));
