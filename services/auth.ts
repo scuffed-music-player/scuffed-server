@@ -11,7 +11,7 @@ export const authenticateToken = (token: unknown) => new Promise<string>((resolv
     } else {
         jwt.verify(token, process.env.TOKEN_SECRET as string, (err: any, username: any) => {
             if (err) {
-                reject("Invalid token");
+                reject("Invalid authentication token");
             } else {
                 resolve(username as string);
             }
