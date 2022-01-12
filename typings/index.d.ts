@@ -13,5 +13,5 @@ export interface IAlbum {
 export interface IUser {
     username: string;
     passwordHash: string;
-    admin?: true;
+    admin: boolean;
 }

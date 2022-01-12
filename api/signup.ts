@@ -39,7 +39,8 @@ export const useSignupRoute: (db: Db) => Handler = (db) => {
         try {
             await users.insertOne({
                 username,
-                passwordHash: await bcrypt.hash(password, 10)
+                passwordHash: await bcrypt.hash(password, 10),
+                admin: false,
             });
     
             next();
