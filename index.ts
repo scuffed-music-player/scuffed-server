@@ -21,8 +21,8 @@ app.use(cors());
 const dbConnectionString = `mongodb+srv://admin:${process.env.MONGO_SECRET}@cluster0.uulfu.mongodb.net/db?retryWrites=true&w=majority`;
 
 const init = async () => {
-    const client = await MongoClient.connect(dbConnectionString);
-    const db = client.db("db");
+    // const client = await MongoClient.connect(dbConnectionString);
+    // const db = client.db("db");
 
     app.get("/", (req, res) => res.status(200).json({
         success: true,
@@ -33,8 +33,8 @@ const init = async () => {
 
     api.get("/stream/:payload", useStreamRoute());
     api.get("/search/:query", useSearchRoute());
-    api.post("/upload", useUploadRoute(db));
-    api.get("/albums", useAlbumsRoute(db));
+    // api.post("/upload", useUploadRoute(db));
+    // api.get("/albums", useAlbumsRoute(db));
     api.get("/album/:id", useAlbumRoute(db));
     // api.post("/login", useLoginRoute(db));
     // api.post("/signup", authMiddleware, useSignupRoute(db), useLoginRoute(db));
