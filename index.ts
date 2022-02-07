@@ -8,9 +8,9 @@ import { useSearchRoute } from "./api/search";
 import { useUploadRoute } from "./api/upload";
 import { useAlbumsRoute } from "./api/albums";
 import { useAlbumRoute } from "./api/album";
-import { useLoginRoute } from "./api/login";
-import { useSignupRoute } from "./api/signup";
-import { authMiddleware } from "./services/auth";
+// import { useLoginRoute } from "./api/login";
+// import { useSignupRoute } from "./api/signup";
+// import { authMiddleware } from "./services/auth";
 
 dotenv.config();
 
@@ -32,12 +32,12 @@ const init = async () => {
     const api = express.Router();
 
     api.get("/stream/:payload", useStreamRoute());
-    api.get("/search/:query", authMiddleware, useSearchRoute());
-    api.post("/upload", authMiddleware, useUploadRoute(db));
-    api.get("/albums", authMiddleware, useAlbumsRoute(db));
-    api.get("/album/:id", authMiddleware, useAlbumRoute(db));
-    api.post("/login", useLoginRoute(db));
-    api.post("/signup", authMiddleware, useSignupRoute(db), useLoginRoute(db));
+    api.get("/search/:query", useSearchRoute());
+    api.post("/upload", useUploadRoute(db));
+    api.get("/albums", useAlbumsRoute(db));
+    api.get("/album/:id", useAlbumRoute(db));
+    // api.post("/login", useLoginRoute(db));
+    // api.post("/signup", authMiddleware, useSignupRoute(db), useLoginRoute(db));
 
     app.use("/api", api);
 
