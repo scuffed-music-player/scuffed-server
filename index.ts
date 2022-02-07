@@ -35,7 +35,7 @@ const init = async () => {
     api.get("/search/:query", useSearchRoute());
     // api.post("/upload", useUploadRoute(db));
     // api.get("/albums", useAlbumsRoute(db));
-    api.get("/album/:id", useAlbumRoute(db));
+    // api.get("/album/:id", useAlbumRoute(db));
     // api.post("/login", useLoginRoute(db));
     // api.post("/signup", authMiddleware, useSignupRoute(db), useLoginRoute(db));
 
