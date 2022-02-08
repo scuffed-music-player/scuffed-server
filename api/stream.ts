@@ -38,8 +38,10 @@ export const useStreamRoute: () => Handler = () => async (req, res) => {
 
     try {
         await fs.access(`./saves/${id}.mp3`);
-        res.sendFile(`./saves/${id}.mp3`);
+        console.log("found file");
+        res.sendFile(`${process.cwd()}/saves/${id}.mp3`);
     } catch (err) {
+        console.log(err);
         ytdl(
             id, {
                 quality: "highestaudio",

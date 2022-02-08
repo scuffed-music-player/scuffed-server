@@ -19,15 +19,11 @@ export const useDownloadRoute: () => Handler = () => async (req, res) => {
     ffmpeg(stream)
         .audioBitrate(128)
         .save(`./saves/${id}.mp3`)
-        .on("progress", p => res.json({
-            status: "PENDING",
-            progress: p.targetSize
-        }))
-        .on("end", () => res.json({
-            status: "SUCCESS",
-        }))
-        .on("error", error => res.json({
-            status: "ERROR",
+        .on("end", () => res.send(JSON.stringify({
+            success: true,
+        })))
+        .on("error", error => res.send(JSON.stringify({
+            success: false,
             error
-        }).end());
+        })));
 }
