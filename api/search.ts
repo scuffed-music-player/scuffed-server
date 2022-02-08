@@ -6,7 +6,9 @@ export const useSearchRoute: () => Handler = () => async (req, res) => {
     try {
         const query = req.params.query.toLowerCase().trim();
 
-        const searchResults = await youtube.search(query);
+        const searchResults = await youtube.search(query, {
+            type: "video"
+        });
         const target = searchResults.videos[0];
 
         const final: ISongData = {

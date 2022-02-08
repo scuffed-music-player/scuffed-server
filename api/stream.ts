@@ -1,8 +1,9 @@
 import { Handler } from "express";
 import ytdl from "ytdl-core";
+import { promises as fs } from "fs";
 // import { authenticateToken } from "../services/auth";
 
-export const useStreamRoute: () => Handler = () => (req, res) => {
+export const useStreamRoute: () => Handler = () => async (req, res) => {
     // let id: string | undefined;
     // let token: string | undefined;
 
@@ -35,11 +36,16 @@ export const useStreamRoute: () => Handler = () => (req, res) => {
 
     let id = req.params.payload;
 
-    ytdl(
-        id, {
-            quality: "highestaudio",
-        }
-    )
-    .pipe(res)
-    .on("error", console.log);
+    try {
+        await fs.access(`./saves/${id}.mp3`);
+        res.sendFile(`./saves/${id}.mp3`);
+    } catch (err) {
+        ytdl(
+            id, {
+                quality: "highestaudio",
+            }
+        )
+        .pipe(res)
+        .on("error", console.log);
+    }
 }
