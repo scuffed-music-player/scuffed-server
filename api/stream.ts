@@ -35,19 +35,21 @@ export const useStreamRoute: () => Handler = () => async (req, res) => {
     // }
 
     let id = req.params.payload;
+    console.log(`Requested stream of song ${id}`);
 
     try {
         await fs.access(`./saves/${id}.mp3`);
-        console.log("found file");
         res.sendFile(`${process.cwd()}/saves/${id}.mp3`);
+        console.log(`Serving downloaded song ./saves/${id}.mp3.\n---`);
     } catch (err) {
-        console.log(err);
+        console.log(`Starting stream of song ${id}.\n---`);
         ytdl(
             id, {
                 quality: "highestaudio",
             }
         )
         .pipe(res)
-        .on("error", console.log);
+        .on("end", () => console.log(`Ended stream of song ${id}.\n---`))
+        .on("error", error => console.log(`Error streaming song ${id}.`, error, "\n---"));
     }
 }

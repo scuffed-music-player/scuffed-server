@@ -43,7 +43,7 @@ const init = async () => {
 
     app.use("/api", api);
 
-    app.listen(process.env.PORT || 8080, () => console.log(`Started streaming server on port ${process.env.PORT || 8080}`));
+    app.listen(process.env.PORT || 8080, () => console.log(`Started streaming server on port ${process.env.PORT || 8080}!\n---`));
 };
 
 init();
