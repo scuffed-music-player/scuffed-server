@@ -2,6 +2,7 @@ export interface ISongData {
     id: string;
     title: string;
     thumbnail: string;
+    downloaded: boolean;
 }
 
 export interface IAlbum {
