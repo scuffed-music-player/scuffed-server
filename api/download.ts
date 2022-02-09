@@ -4,8 +4,8 @@ import ffmpeg from "fluent-ffmpeg";
 import { promises as fs } from "fs";
 
 export const useDownloadRoute: () => Handler = () => async (req, res) => {
-    let id = req.params.payload;
-    console.log(`Requested download of song ${id}`);
+    let id = req.params.id;
+    console.log(`Requested download of song ${id}.`);
 
     try {
         await fs.access(`./saves/${id}.mp3`);
