@@ -4,6 +4,7 @@ import cors from "cors";
 import { useStreamRoute } from "./api/stream";
 import { useSearchRoute } from "./api/search";
 import { useDownloadRoute } from "./api/download";
+import { useProxyRoute } from "./api/proxy";
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ const api = express.Router();
 api.get("/stream/:id", useStreamRoute());
 api.get("/download/:id", useDownloadRoute());
 api.get("/search/:query", useSearchRoute());
+api.get("/proxy/:url", useProxyRoute());
 
 app.use("/api", api);
 
