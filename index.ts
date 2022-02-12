@@ -1,28 +1,41 @@
 import express from "express";
 import cors from "cors";
+import { promises as fs } from "fs";
 
-import { useStreamRoute } from "./api/stream";
-import { useSearchRoute } from "./api/search";
-import { useDownloadRoute } from "./api/download";
-import { useProxyRoute } from "./api/proxy";
+import { streamRoute } from "./api/stream";
+import { searchRoute } from "./api/search";
+import { downloadRoute } from "./api/download";
+import { proxyRoute } from "./api/proxy";
+import { playlistRoutes } from "./api/playlists";
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+const init = async () => {
+    try {
+        await fs.access(`${process.cwd()}/data`);
+    } catch (error) {
+        await fs.mkdir(`${process.cwd()}/data`);
+    }
 
-app.get("/", (req, res) => res.status(200).json({
-    success: true,
-    message: "Root of the streaming server! Useful endpoints are at /api <3"
-}));
+    const app = express();
+    app.use(express.json());
+    app.use(cors());
 
-const api = express.Router();
+    app.get("/", (req, res) => res.status(200).json({
+        success: true,
+        message: "Root of the streaming server! Useful endpoints are at /api <3"
+    }));
 
-api.get("/stream/:id", useStreamRoute());
-api.get("/download/:id", useDownloadRoute());
-api.get("/search/:query", useSearchRoute());
-api.get("/proxy/:url", useProxyRoute());
+    const api = express.Router();
 
-app.use("/api", api);
+    api.get("/stream/:id", streamRoute);
+    api.get("/download/:id", downloadRoute);
+    api.get("/search/:query", searchRoute);
+    api.get("/proxy/:url", proxyRoute);
+    api.use("/playlists", playlistRoutes);
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Started streaming server on port ${PORT}!\n---`));
+    app.use("/api", api);
+
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => console.log(`Started streaming server on port ${PORT}!\n---`));
+}
+
+init();

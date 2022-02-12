@@ -5,14 +5,8 @@ export interface ISongData {
     downloaded: boolean;
 }
 
-export interface IAlbum {
+export interface IPlaylist {
+    _id: string;
     name: string;
-    artist: string;
     songs: ISongData[];
-}
-
-export interface IUser {
-    username: string;
-    passwordHash: string;
-    admin: boolean;
 }

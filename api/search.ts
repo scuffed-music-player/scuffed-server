@@ -17,7 +17,7 @@ const search = async (q: string) => {
     return result;
 }
 
-export const useSearchRoute: () => Handler = () => async (req, res) => {
+export const searchRoute: Handler = async (req, res) => {
     try {
         const query = req.params.query.toLowerCase().trim();
         const target = await search(query);
@@ -25,7 +25,7 @@ export const useSearchRoute: () => Handler = () => async (req, res) => {
         let downloaded: boolean = false;
 
         try {
-            await fs.access(`./saves/${target.id}.mp3`);
+            await fs.access(`${process.cwd()}/data/saves/${target.id}.mp3`);
             downloaded = true;
         } catch (err) {
             /* This means that the song isn't downloaded yet. */
