@@ -1,6 +1,4 @@
 node_modules/
 .env
-static/
 dist/
-out-tsc/
-saves/
+data/
