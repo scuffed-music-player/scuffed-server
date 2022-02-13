@@ -1,40 +1,60 @@
 import { Router } from "express";
 import ytdl from "ytdl-core";
 import ffmpeg from "fluent-ffmpeg";
-import { promises as fs } from "fs";
+import { promises as fs, createWriteStream } from "fs";
+import fetch from "node-fetch";
+import { makeDirectory } from "../helpers/makeDirectory";
+import { pathExists } from "../helpers/pathExists";
 
 const saveRoutes = Router();
 
 // Download a song by id:
 saveRoutes.post("/:id", async (req, res) => {
     const id = req.params.id;
+    const PORT = process.env.PORT || 8080;
     console.log(`Requested download of song ${id}.`);
 
-    try {
-        await fs.access(`${process.cwd()}/data/saves/${id}.mp3`);
+    // If the song already downloaded:
+    if (await pathExists(`/data/songs/${id}.mp3`)) {
         console.log(`Song ${id} already downloaded.\n---`);
         return res.status(200).json({
             success: true,
+            thumbnail: await pathExists(`/data/thumbnails/${id}.jpg`) ?
+                `http://localhost:${PORT}/data/thumbnails/${id}.jpg` :
+                `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+        });
+    }
+
+    // Make sure download directories exist:
+    await makeDirectory("/data/songs");
+    await makeDirectory("/data/thumbnails");
+
+    // Download the thumbnail:
+    try {
+        const { body: thumbnailBody } = await fetch(`https://i.ytimg.com/vi/${id}/hqdefault.jpg`);
+        const thumbnailStream = createWriteStream(`${process.cwd()}/data/thumbnails/${id}.jpg`);
+        await new Promise((resolve, reject) => {
+            thumbnailBody?.pipe(thumbnailStream);
+            thumbnailBody?.on("error", reject);
+            thumbnailStream.on("finish", resolve);
         });
     } catch (err) {
-        /* This means that the song isn't downloaded yet. */
+        console.log(`Unable to download thumbnail for song ${id}. Continuing with song download.`);
     }
 
-    try {
-        await fs.access(`${process.cwd()}/data/saves`);
-    } catch (err) {
-        await fs.mkdir(`${process.cwd()}/data/saves`, { recursive: true });
-    }
-
+    // Download the song"
     ffmpeg(ytdl(id, {
         quality: "highestaudio",
     }))
         .audioBitrate(128)
-        .save(`${process.cwd()}/data/saves/${id}.mp3`)
-        .on("end", () => {
+        .save(`${process.cwd()}/data/songs/${id}.mp3`)
+        .on("end", async () => {
             console.log(`Successfully downloaded song ${id}.\n---`);
             res.status(200).json({
                 success: true,
+                thumbnail: await pathExists(`/data/thumbnails/${id}.jpg`) ?
+                    `http://localhost:${PORT}/data/thumbnails/${id}.jpg` :
+                    `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
             });
         })
         .on("error", error => {
@@ -51,8 +71,10 @@ saveRoutes.delete("/:id", async (req, res) => {
     const id = req.params.id;
     console.log(`Requested delete of saved song ${id}.`);
 
+    // Delete all the associated files (mp3 & thumbnail):
     try {
-        await fs.rm(`${process.cwd()}/data/saves/${id}.mp3`);
+        await fs.rm(`${process.cwd()}/data/songs/${id}.mp3`);
+        await fs.rm(`${process.cwd()}/data/thumbnails/${id}.jpg`);
         console.log(`Successfully deleted saved song ${id}.\n---`);
     } catch (err) {
         /* File path doesn't exist */

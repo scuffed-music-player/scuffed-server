@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { IPlaylist } from "../typings";
 import { promises as fs } from "fs";
+import { pathExists } from "../helpers/pathExists";
 
 const setPlaylists = (playlists: IPlaylist[]) => fs.writeFile(
     `${process.cwd()}/data/playlists.json`, 
@@ -8,11 +9,9 @@ const setPlaylists = (playlists: IPlaylist[]) => fs.writeFile(
 );
 
 async function getPlaylists(): Promise<IPlaylist[]> {
-    try {
-        await fs.access(`${process.cwd()}/data/playlists.json`);
+    if (await pathExists("/data/playlists.json")) {
         return JSON.parse(await fs.readFile(`${process.cwd()}/data/playlists.json`, "utf8"));
-    } catch (err) {
-        await fs.writeFile(`${process.cwd()}/data/playlists.json`, "[]");
+    } else {
         return [];
     }
 };

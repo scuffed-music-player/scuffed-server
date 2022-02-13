@@ -1,7 +1,7 @@
 import { Handler } from "express";
 import { youtube } from "scrape-youtube";
 import { ISongData } from "../typings";
-import { promises as fs } from "fs";
+import { pathExists } from "../helpers/pathExists";
 
 const search = async (q: string) => {
     let result = (await youtube.search(`${q} song`, {
@@ -22,14 +22,7 @@ export const searchRoute: Handler = async (req, res) => {
         const query = req.params.query.toLowerCase().trim();
         const target = await search(query);
 
-        let downloaded: boolean = false;
-
-        try {
-            await fs.access(`${process.cwd()}/data/saves/${target.id}.mp3`);
-            downloaded = true;
-        } catch (err) {
-            /* This means that the song isn't downloaded yet. */
-        }
+        let downloaded = await pathExists(`/data/songs/${target.id}.mp3`);
 
         const final: ISongData = {
             id: target.id,

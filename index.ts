@@ -1,19 +1,16 @@
 import express from "express";
 import cors from "cors";
-import { promises as fs } from "fs";
 
 import { streamRoute } from "./api/stream";
 import { searchRoute } from "./api/search";
-import { proxyRoute } from "./api/proxy";
 import { playlistRoutes } from "./api/playlists";
 import { saveRoutes } from "./api/saves";
 
-const init = async () => {
-    try {
-        await fs.access(`${process.cwd()}/data`);
-    } catch (error) {
-        await fs.mkdir(`${process.cwd()}/data`);
-    }
+import { makeDirectory } from "./helpers/makeDirectory";
+
+(async () => {
+    await makeDirectory("/data/songs");
+    await makeDirectory("/data/thumbnails");
 
     const app = express();
     app.use(express.json());
@@ -28,7 +25,6 @@ const init = async () => {
 
     api.get("/stream/:id", streamRoute);
     api.get("/search/:query", searchRoute);
-    api.get("/proxy/:url", proxyRoute);
     api.use("/playlists", playlistRoutes);
     api.use("/saves", saveRoutes);
 
@@ -37,6 +33,4 @@ const init = async () => {
     const PORT = process.env.PORT || 8080;
     console.log("---");
     app.listen(PORT, () => console.log(`Started streaming server on port ${PORT}!\n---`));
-}
-
-init();
+})();
