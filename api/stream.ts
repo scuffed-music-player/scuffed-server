@@ -4,7 +4,7 @@ import { pathExists } from "../helpers/pathExists";
 
 export const streamRoute: Handler = async (req, res) => {
     let id = req.params.id;
-    console.log(`Requested stream of song ${id}`);
+    console.log(`Requested stream of song ${id}.`);
 
     let downloaded = await pathExists(`/data/songs/${id}.mp3`);
     if (downloaded) {
