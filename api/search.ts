@@ -27,7 +27,9 @@ export const searchRoute: Handler = async (req, res) => {
         const final: ISongData = {
             id: target.id,
             title: target.title,
-            thumbnail: target.thumbnail,
+            thumbnail: downloaded ?
+                `http://localhost:${process.env.PORT || 8080}/thumbnails/${target.id}.jpg` :
+                target.thumbnail,
             downloaded,
         };
 

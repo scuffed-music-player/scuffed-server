@@ -11,7 +11,7 @@ const saveRoutes = Router();
 // Download a song by id:
 saveRoutes.post("/:id", async (req, res) => {
     const id = req.params.id;
-    const PORT = process.env.PORT || 8080;
+    const savedThumbnailURL = `http://localhost:${process.env.PORT || 8080}/thumbnails/${id}.jpg`;
     console.log(`Requested download of song ${id}.`);
 
     // If the song already downloaded:
@@ -20,7 +20,7 @@ saveRoutes.post("/:id", async (req, res) => {
         return res.status(200).json({
             success: true,
             thumbnail: await pathExists(`/data/thumbnails/${id}.jpg`) ?
-                `http://localhost:${PORT}/data/thumbnails/${id}.jpg` :
+                savedThumbnailURL :
                 `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
         });
     }
@@ -53,7 +53,7 @@ saveRoutes.post("/:id", async (req, res) => {
             res.status(200).json({
                 success: true,
                 thumbnail: await pathExists(`/data/thumbnails/${id}.jpg`) ?
-                    `http://localhost:${PORT}/data/thumbnails/${id}.jpg` :
+                    savedThumbnailURL :
                     `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
             });
         })
