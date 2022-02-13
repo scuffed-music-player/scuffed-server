@@ -2,7 +2,7 @@ import { Router } from "express";
 import ytdl from "ytdl-core";
 import ffmpeg from "fluent-ffmpeg";
 import { promises as fs, createWriteStream } from "fs";
-import fetch from "node-fetch";
+import request from "request";
 import { makeDirectory } from "../helpers/makeDirectory";
 import { pathExists } from "../helpers/pathExists";
 
@@ -31,12 +31,11 @@ saveRoutes.post("/:id", async (req, res) => {
 
     // Download the thumbnail:
     try {
-        const { body: thumbnailBody } = await fetch(`https://i.ytimg.com/vi/${id}/hqdefault.jpg`);
-        const thumbnailStream = createWriteStream(`${process.cwd()}/data/thumbnails/${id}.jpg`);
         await new Promise((resolve, reject) => {
-            thumbnailBody?.pipe(thumbnailStream);
-            thumbnailBody?.on("error", reject);
-            thumbnailStream.on("finish", resolve);
+            request.get(`https://i.ytimg.com/vi/${id}/hqdefault.jpg`)
+                .pipe(createWriteStream(`${process.cwd()}/data/thumbnails/${id}.jpg`))
+                .on("finish", resolve)
+                .on("error", reject);
         });
     } catch (err) {
         console.log(`Unable to download thumbnail for song ${id}. Continuing with song download.`);

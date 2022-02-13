@@ -22,15 +22,14 @@ import { makeDirectory } from "./helpers/makeDirectory";
     }));
 
     const api = express.Router();
-
     api.get("/stream/:id", streamRoute);
     api.get("/search/:query", searchRoute);
     api.use("/playlists", playlistRoutes);
     api.use("/saves", saveRoutes);
-
     app.use("/api", api);
 
+    app.use("/thumbnails", express.static(`${process.cwd()}/data/thumbnails`));
+
     const PORT = process.env.PORT || 8080;
-    console.log("---");
-    app.listen(PORT, () => console.log(`Started streaming server on port ${PORT}!\n---`));
+    app.listen(PORT, () => console.log(`---\nStarted streaming server on port ${PORT}!\n---`));
 })();
