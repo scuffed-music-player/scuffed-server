@@ -6,6 +6,7 @@ const setPlaylists = (playlists: IPlaylist[]) => fs.writeFile(
     `${process.cwd()}/data/playlists.json`, 
     JSON.stringify(playlists)
 );
+
 async function getPlaylists(): Promise<IPlaylist[]> {
     try {
         await fs.access(`${process.cwd()}/data/playlists.json`);

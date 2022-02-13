@@ -4,9 +4,9 @@ import { promises as fs } from "fs";
 
 import { streamRoute } from "./api/stream";
 import { searchRoute } from "./api/search";
-import { downloadRoute } from "./api/download";
 import { proxyRoute } from "./api/proxy";
 import { playlistRoutes } from "./api/playlists";
+import { saveRoutes } from "./api/saves";
 
 const init = async () => {
     try {
@@ -27,14 +27,15 @@ const init = async () => {
     const api = express.Router();
 
     api.get("/stream/:id", streamRoute);
-    api.get("/download/:id", downloadRoute);
     api.get("/search/:query", searchRoute);
     api.get("/proxy/:url", proxyRoute);
     api.use("/playlists", playlistRoutes);
+    api.use("/saves", saveRoutes);
 
     app.use("/api", api);
 
     const PORT = process.env.PORT || 8080;
+    console.log("---");
     app.listen(PORT, () => console.log(`Started streaming server on port ${PORT}!\n---`));
 }
 
