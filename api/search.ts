@@ -2,6 +2,7 @@ import { Handler } from "express";
 import { ISongData } from "../typings";
 import { pathExists } from "../helpers/pathExists";
 import { searchSong } from "../helpers/searchSong";
+import { filterSongName } from "../helpers/filterSongName";
 
 export const searchRoute: Handler = async (req, res) => {
     try {
@@ -12,7 +13,7 @@ export const searchRoute: Handler = async (req, res) => {
 
         const final: ISongData = {
             id: target.id,
-            title: target.title,
+            title: filterSongName(target.title),
             thumbnail: downloaded ?
                 `http://localhost:${process.env.PORT || 8080}/thumbnails/${target.id}.jpg` :
                 target.thumbnail,
