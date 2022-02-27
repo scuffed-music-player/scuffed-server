@@ -1,26 +1,12 @@
 import { Handler } from "express";
-import { youtube } from "scrape-youtube";
 import { ISongData } from "../typings";
 import { pathExists } from "../helpers/pathExists";
-
-const search = async (q: string) => {
-    let result = (await youtube.search(`${q} song`, {
-        type: "video"
-    })).videos[0];
-
-    if (result.title.toLowerCase().includes("official video") || result.title.toLowerCase().includes("music video")) {
-        result = (await youtube.search(`${q} audio`, {
-            type: "video"
-        })).videos[0];
-    }
-
-    return result;
-}
+import { searchSong } from "../helpers/searchSong";
 
 export const searchRoute: Handler = async (req, res) => {
     try {
         const query = req.params.query.toLowerCase().trim();
-        const target = await search(query);
+        const target = await searchSong(query);
 
         let downloaded = await pathExists(`/data/songs/${target.id}.mp3`);
 
