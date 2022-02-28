@@ -19,21 +19,21 @@ const tokensAreContained = (query: string, title: string) => {
 export async function searchSong(q: string): Promise<Video> {
     const query = simplifyQuery(q);
 
-    const results = (await youtube.search(`${query} song audio topic`, {
-        type: "video"
-    })).videos;
+    // const results = (await youtube.search(`${query} song audio topic`, {
+    //     type: "video"
+    // })).videos;
 
-    const songVideo = results.find(v => v.channel.name.includes("- Topic"));
+    // const songVideo = results.find(v => v.channel.name.includes("- Topic"));
 
-    if (songVideo && tokensAreContained(query, simplifyQuery(songVideo.title))) {
-        console.log({
-            query,
-            match: simplifyQuery(songVideo.title)
-        });
-        return songVideo;
-    }
+    // if (songVideo && tokensAreContained(query, simplifyQuery(songVideo.title))) {
+    //     console.log({
+    //         query,
+    //         match: simplifyQuery(songVideo.title)
+    //     });
+    //     return songVideo;
+    // }
 
-    const firstResult = (await youtube.search(`${query} song`, {
+    const firstResult = (await youtube.search(`${query} song audio`, {
         type: "video"
     })).videos[0];
 
