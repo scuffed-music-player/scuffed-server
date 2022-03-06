@@ -33,7 +33,7 @@ export async function searchSong(q: string): Promise<Video> {
     //     return songVideo;
     // }
 
-    const firstResult = (await youtube.search(`${query} song audio`, {
+    const firstResult = (await youtube.search(`${query} song`, {
         type: "video"
     })).videos[0];
 
