@@ -8,21 +8,21 @@ const simplifyQuery = (q: string) => q
     .toLowerCase()
     .trim();
 
-export async function searchSong(q: string): Promise<Video> {
+export async function searchSong(q: string): Promise<Video[]> {
     const query = simplifyQuery(q);
 
-    const firstResult = (await youtube.search(`${query} song`, {
+    const results = (await youtube.search(`${query} song`, {
         type: "video"
-    })).videos[0];
+    })).videos;
 
     if (
-        firstResult.title.toLowerCase().includes("official video") || 
-        firstResult.title.toLowerCase().includes("music video")
+        results[0].title.toLowerCase().includes("official video") || 
+        results[0].title.toLowerCase().includes("music video")
     ) {
         return (await youtube.search(`${q} audio`, {
             type: "video"
-        })).videos[0];
+        })).videos;
     }
 
-    return firstResult;
+    return results;
 }

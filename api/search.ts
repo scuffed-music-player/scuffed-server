@@ -7,22 +7,25 @@ import { filterSongName } from "../helpers/filterSongName";
 export const searchRoute: Handler = async (req, res) => {
     try {
         const query = req.params.query.toLowerCase().trim();
-        const target = await searchSong(query);
+        const results = await searchSong(query);
 
-        let downloaded = await pathExists(`/data/songs/${target.id}.mp3`);
+        const songs: ISongData[] = [];
 
-        const final: ISongData = {
-            id: target.id,
-            title: filterSongName(target.title),
-            thumbnail: downloaded ?
-                `http://localhost:${process.env.PORT || 8080}/thumbnails/${target.id}.jpg` :
-                target.thumbnail,
-            downloaded,
-        };
+        for (const target of results) {
+            let downloaded = await pathExists(`/data/songs/${target.id}.mp3`);
+            songs.push({
+                id: target.id,
+                title: filterSongName(target.title),
+                thumbnail: downloaded ?
+                    `http://localhost:${process.env.PORT || 8080}/thumbnails/${target.id}.jpg` :
+                    target.thumbnail,
+                downloaded: await pathExists(`/data/songs/${target.id}.mp3`),
+            })
+        }
 
         return res.status(200).json({
             success: true,
-            song: final
+            songs
         });
     } catch (err) {
         return res.status(500).json({
