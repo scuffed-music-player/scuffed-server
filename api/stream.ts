@@ -15,6 +15,7 @@ export const streamRoute: Handler = async (req, res) => {
     console.log(`Starting stream of song ${id}.\n---`);
     ytdl(id, {
         quality: "highestaudio",
+        filter: "audioonly"
     })
         .pipe(res)
         .on("end", () => console.log(`Ended stream of song ${id}.\n---`))
