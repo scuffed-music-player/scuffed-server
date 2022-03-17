@@ -18,7 +18,8 @@ const flags = [
     "「amv」",
     "[amv]",
     "[official lyric video]",
-    "「 amv 」"
+    "「 amv 」",
+    "⠀"
 ];
 
 const recursivelyRemoveDoubleSpaces = (q: string): string => {

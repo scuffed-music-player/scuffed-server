@@ -11,18 +11,9 @@ const simplifyQuery = (q: string) => q
 export async function searchSong(q: string): Promise<Video[]> {
     const query = simplifyQuery(q);
 
-    const results = (await youtube.search(`${query} song`, {
+    const results = (await youtube.search(`${query} song audio`, {
         type: "video"
     })).videos;
-
-    if (
-        results[0].title.toLowerCase().includes("official video") || 
-        results[0].title.toLowerCase().includes("music video")
-    ) {
-        return (await youtube.search(`${q} audio`, {
-            type: "video"
-        })).videos;
-    }
 
     return results;
 }
