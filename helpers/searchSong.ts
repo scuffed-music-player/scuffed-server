@@ -8,30 +8,8 @@ const simplifyQuery = (q: string) => q
     .toLowerCase()
     .trim();
 
-const tokensAreContained = (query: string, title: string) => {
-    const queryTokens = query.split(" ");
-    for (const token of title.split(" ")) {
-        if (!queryTokens.includes(token)) return false;
-    }
-    return true;
-};
-
 export async function searchSong(q: string): Promise<Video> {
     const query = simplifyQuery(q);
-
-    // const results = (await youtube.search(`${query} song audio topic`, {
-    //     type: "video"
-    // })).videos;
-
-    // const songVideo = results.find(v => v.channel.name.includes("- Topic"));
-
-    // if (songVideo && tokensAreContained(query, simplifyQuery(songVideo.title))) {
-    //     console.log({
-    //         query,
-    //         match: simplifyQuery(songVideo.title)
-    //     });
-    //     return songVideo;
-    // }
 
     const firstResult = (await youtube.search(`${query} song`, {
         type: "video"
