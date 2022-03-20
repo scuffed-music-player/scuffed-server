@@ -13,9 +13,16 @@ export const searchRoute: Handler = async (req, res) => {
 
         for (const target of results) {
             let downloaded = await pathExists(`/data/songs/${target.id}.mp3`);
+            let artist = target.channel.name.toLowerCase();
+
+            if (artist.endsWith("- topic")) {
+                artist = artist.substring(0, artist.length - 7).trim()
+            }
+
             songs.push({
                 id: target.id,
                 title: filterSongName(target.title),
+                artist,
                 thumbnail: downloaded ?
                     `http://localhost:${process.env.PORT || 8080}/thumbnails/${target.id}.jpg` :
                     target.thumbnail,
