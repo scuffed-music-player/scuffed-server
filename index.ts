@@ -5,6 +5,7 @@ import { streamRoute } from "./api/stream";
 import { searchRoute } from "./api/search";
 import { playlistRoutes } from "./api/playlists";
 import { saveRoutes } from "./api/saves";
+import { proxyRoute } from "./api/proxy";
 
 import { makeDirectory } from "./helpers/makeDirectory";
 
@@ -26,6 +27,8 @@ import { makeDirectory } from "./helpers/makeDirectory";
     api.get("/search/:query", searchRoute);
     api.use("/playlists", playlistRoutes);
     api.use("/saves", saveRoutes);
+    api.get("/proxy/:url", proxyRoute);
+
     app.use("/api", api);
 
     app.use("/thumbnails", express.static(`${process.cwd()}/data/thumbnails`));
