@@ -1,7 +1,7 @@
 import { Handler } from "express";
 import { ISongData } from "../typings";
 import { pathExists } from "../helpers/pathExists";
-import { searchSong } from "../helpers/searchSong";
+import { searchSong } from "../helpers/v1searchSong";
 import { filterSongName } from "../helpers/filterSongName";
 
 export const searchRoute: Handler = async (req, res) => {
