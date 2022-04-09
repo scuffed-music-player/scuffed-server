@@ -16,7 +16,6 @@
         "files": true
     },
     "files": [
-        "index.ts",
-        "typings/youtube-music-api.d.ts"
+        "index.ts"
     ]
 }
