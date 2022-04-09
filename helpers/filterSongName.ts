@@ -13,6 +13,8 @@ const flags = [
     "(lyric video)",
     "(official)",
     "(pseudo video)",
+    "(official video)",
+    "(music video)",
     "()",
     "[]",
     "「amv」",

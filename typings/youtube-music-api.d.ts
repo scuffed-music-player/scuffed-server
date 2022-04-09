@@ -1,5 +1,5 @@
 declare module "youtube-music-api" {
-    interface IAPISongData {
+    interface IAPISong {
         type: "song";
         name: string;
         videoId: string;
@@ -7,8 +7,18 @@ declare module "youtube-music-api" {
         thumbnail: string;
     }
 
+    interface IAPIAlbum {
+        type: "album",
+        browseId: string;
+        name: string;
+        artist: string;
+        thumbnails: ({
+            url: string;
+        })[];
+    }
+
     export default class YoutubeMusic {
         initalize(): Promise<unknown>;
-        search(query: string, type: "song"): Promise<{ content: IAPISongData[] }>;
+        search(query: string, type: "album"): Promise<{ content: IAPIAlbum[] }>;
     }
 }
