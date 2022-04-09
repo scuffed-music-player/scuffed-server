@@ -10,6 +10,7 @@ const flags = [
     "(official music video)",
     "(official music audio)",
     "(official lyric video)",
+    "[official visualizer]",
     "(lyric video)",
     "(official)",
     "(pseudo video)",
