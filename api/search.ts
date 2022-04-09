@@ -1,13 +1,13 @@
 import { Handler } from "express";
-import { ISongData } from "../typings";
+import { IAlbumData, ISongData } from "../typings";
 import { pathExists } from "../helpers/pathExists";
-import { searchSong } from "../helpers/v1searchSong";
+import { searchSongs } from "../helpers/search";
 import { filterSongName } from "../helpers/filterSongName";
 
 export const searchRoute: Handler = async (req, res) => {
     try {
-        const query = req.params.query.toLowerCase().trim();
-        const results = await searchSong(query);
+        const query = req.params.query;
+        const results = await searchSongs(query);
 
         const songs: ISongData[] = [];
 
@@ -32,7 +32,8 @@ export const searchRoute: Handler = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            songs
+            songs,
+            albums: []
         });
     } catch (err) {
         return res.status(500).json({

@@ -17,4 +17,5 @@ export interface IAlbumData {
     title: string;
     artist: string;
     thumbnail: string;
+    songs: ISongData[];
 }
