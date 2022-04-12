@@ -6,6 +6,7 @@ import { searchRoute } from "./api/search";
 import { playlistRoutes } from "./api/playlists";
 import { saveRoutes } from "./api/saves";
 import { proxyRoute } from "./api/proxy";
+import { idsRoute } from "./api/ids";
 
 import { makeDirectory } from "./helpers/makeDirectory";
 
@@ -23,11 +24,13 @@ import { makeDirectory } from "./helpers/makeDirectory";
     }));
 
     const api = express.Router();
+    
     api.get("/stream/:id", streamRoute);
     api.get("/search/:query", searchRoute);
     api.use("/playlists", playlistRoutes);
     api.use("/saves", saveRoutes);
     api.get("/proxy/:url", proxyRoute);
+    api.post("/ids", idsRoute);
 
     app.use("/api", api);
 
