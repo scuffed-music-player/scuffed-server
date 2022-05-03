@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 
 import { streamRoute } from "./api/stream";
 import { searchRoute } from "./api/search";
@@ -16,12 +15,6 @@ import { makeDirectory } from "./helpers/makeDirectory";
 
     const app = express();
     app.use(express.json());
-    app.use(cors());
-
-    app.get("/", (req, res) => res.status(200).json({
-        success: true,
-        message: "Root of the streaming server! Useful endpoints are at /api <3"
-    }));
 
     const api = express.Router();
     
@@ -34,8 +27,14 @@ import { makeDirectory } from "./helpers/makeDirectory";
 
     app.use("/api", api);
 
-    app.use("/thumbnails", express.static(`${process.cwd()}/data/thumbnails`));
+    app.use("/thumbnails",
+        express.static(`${process.cwd()}/data/thumbnails`));
 
+    app.use("/", express.static(`${process.cwd()}/client/dist`));
+    app.get("/", (req, res) => 
+        res.sendFile(`${process.cwd()}/client/dist/index.html`)
+    );
+  
     const PORT = process.env.PORT || 8080;
     app.listen(PORT, () => console.log(`---\nStarted streaming server on port ${PORT}!\n---`));
 })();
